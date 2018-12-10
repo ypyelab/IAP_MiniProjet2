@@ -29,9 +29,20 @@ public class Demo2Behavior extends AreaBehavior{
 		return ((Demo2Cell) getCells()[coord.x][coord.y]).isDoor();
 	}
 	
+	public boolean isWall(DiscreteCoordinates coord) {
+		return ((Demo2Cell) getCells()[coord.x][coord.y]).isWall();
+	}
 	
-    public boolean canEnter (Interactable entity, DiscreteCoordinates coord) {
-		return ((Demo2Cell) getCells()[coord.x][coord.y]).canEnter(entity);
+	public boolean isNull(DiscreteCoordinates coord) {
+		return ((Demo2Cell) getCells()[coord.x][coord.y]).isNull();
+	}
+	
+    public boolean canLeave (Interactable entity, DiscreteCoordinates coord) {
+    	return ((Demo2Cell) getCells()[coord.x][coord.y]).canLeave(entity);
+    }
+    
+    public boolean canEnter (Interactable entity,DiscreteCoordinates coord) {
+    	return ((Demo2Cell) getCells()[coord.x][coord.y]).canEnter(entity);
     }
 	
     public class Demo2Cell extends Cell{
@@ -41,7 +52,16 @@ public class Demo2Behavior extends AreaBehavior{
     		this.type=type;
     	}
     	protected boolean isDoor() {
-    		return (this.type==Demo2Behavior.Demo2CellType.DOOR );
+    		return (this.type == Demo2Behavior.Demo2CellType.DOOR );
+    	}
+    	
+    	//functions to understand what is the ghost seeing
+    	protected boolean isWall() {
+    		return (this.type == Demo2Behavior.Demo2CellType.WALL );
+    	}
+    	
+    	protected boolean isNull() {
+    		return (this.type==Demo2Behavior.Demo2CellType.NULL );
     	}
     	//...
 		@Override

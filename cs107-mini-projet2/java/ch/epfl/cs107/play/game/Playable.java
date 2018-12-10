@@ -23,7 +23,8 @@ public interface Playable extends Updatable{
 
     /**
      * Getter for game title
-     * Note: Need to be Override
+     * Note: Need to be
+     *  Override
      * @return (String) the game title
      */
     String getTitle();

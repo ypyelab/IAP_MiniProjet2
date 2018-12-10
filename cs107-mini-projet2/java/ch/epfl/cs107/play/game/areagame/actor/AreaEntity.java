@@ -29,7 +29,6 @@ public abstract class AreaEntity extends Entity implements Interactable {
      * @param position (DiscreteCoordinate): Initial position of the entity in the Area. Not null
      */
     public AreaEntity(Area area, Orientation orientation, DiscreteCoordinates position) {
-
         super(position.toVector());
         this.ownerArea = area;
         this.orientation = orientation;
@@ -50,10 +49,11 @@ public abstract class AreaEntity extends Entity implements Interactable {
 	protected void setCurrentPosition(Vector v){
         if(DiscreteCoordinates.isCoordinates(v)) {
         	super.setCurrentPosition(v.round());
-        	currentMainCellCoordinates = new DiscreteCoordinates((int)v.round().x,(int)v.round().y);
+        	currentMainCellCoordinates = new DiscreteCoordinates((int)(v.round().x),(int)(v.round().y));
         }
         else {
         	super.setCurrentPosition(v);
+        	currentMainCellCoordinates = new DiscreteCoordinates((int)(v.x),(int)(v.y));
         }
     }
     

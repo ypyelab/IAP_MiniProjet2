@@ -23,9 +23,10 @@ public class Demo2 extends AreaGame{
     	///that are mainly the two areas
     	addArea(new Room0());
     	addArea(new Room1());
-
+ 
     	//select one of those
     	currentArea = setCurrentArea("LevelSelector", false);
+        currentArea.begin(window, fileSystem);
         
     	//and the actor
     	DiscreteCoordinates xs = new DiscreteCoordinates(5,5);
@@ -43,21 +44,19 @@ public class Demo2 extends AreaGame{
     	if (player.needChangeOfRoom) {
     		if (getCurrentArea().getTitle()=="LevelSelector") {
     			getCurrentArea().unregisterActor(player);
-    			getCurrentArea().suspend();
     			currentArea = setCurrentArea("Level1",false);
     			player.setCurrentPosition(new DiscreteCoordinates(5,2));	
     		}
     		else {
     			getCurrentArea().unregisterActor(player);
-    			getCurrentArea().suspend();
     			currentArea = setCurrentArea("LevelSelector",false);
     			player.setCurrentPosition(new DiscreteCoordinates(5,5));
     		}
     		player.setCurrentArea(currentArea);
     		player.setNoNeedOfChange();
-			getCurrentArea().registerActor(player);	
+    		getCurrentArea().registerActor(player);	
     	}
-    	player.update(deltaTime);
+    	//the area and respective actors are updated
     	getCurrentArea().update(deltaTime);
     	getCurrentArea().setViewCandidate(player);
     }

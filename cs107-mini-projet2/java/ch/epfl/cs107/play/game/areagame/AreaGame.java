@@ -50,7 +50,7 @@ abstract public class AreaGame implements Game {
         			//Stop current game and purge
             		currentArea.suspend();
         		}	
-
+        		
         		/// Whether currentArea existed or not, pass to wanted game if it exists
         		if(areas.get(key)!=null) {
         			currentArea = areas.get(key);

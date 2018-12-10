@@ -55,7 +55,7 @@ public abstract class Entity implements Actor {
 
     @Override
     public Vector getPosition(){
-        return currentPosition;
+        return this.currentPosition;
     }
 
     @Override

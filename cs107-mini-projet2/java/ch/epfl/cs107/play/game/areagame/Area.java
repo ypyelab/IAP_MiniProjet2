@@ -194,9 +194,11 @@ public abstract class Area implements Playable {
         areaBehavior = ab;
     }   
     
+    public abstract boolean canLeave (Interactable entity,List<DiscreteCoordinates> coord);
+    public abstract boolean canEnter (Interactable entity,List<DiscreteCoordinates> coord);
       
     public final boolean leaveAreaCells(Interactable entity, List<DiscreteCoordinates> coordinates) {
-    	if (areaBehavior.canLeave(entity, coordinates)) {
+    	if (this.canLeave(entity, coordinates)) {
     		interactablesToLeave.put(entity, coordinates);
     		return true;
     	}
@@ -206,7 +208,7 @@ public abstract class Area implements Playable {
     }
     
     public final boolean enterAreaCells(Interactable entity, List<DiscreteCoordinates> coordinates) {
-    	if(areaBehavior.canEnter(entity, coordinates)) {
+    	if(this.canEnter(entity, coordinates)) {
     		interactablesToEnter.put(entity, coordinates);
     		return true;
     	}
@@ -264,10 +266,11 @@ public abstract class Area implements Playable {
     public void update(float deltaTime) {
     	//Camera issues
     	updateCamera();
+    	
     	if (!actors.isEmpty()) {
     		actors.forEach(actor->{
     			actor.update(deltaTime);
-            	actor.draw(window);    		
+               	actor.draw(window);    		
         	});
     	}
     	purgeRegistration();

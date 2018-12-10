@@ -37,37 +37,11 @@ public abstract class AreaBehavior
     	cells = new Cell [width][height];
     }
     
-    public boolean canLeave (Interactable entity,List<DiscreteCoordinates> coordinates) {
-    	int sum = 0;
-    	for (DiscreteCoordinates coord: coordinates) {
-    		if (cells[coord.x][coord.y].canLeave(entity)==true) {
-    	    	sum = sum + 1;
-    	    }
-    	}
-    	//verify that for all cells are agreement to enter
-    	if (sum == coordinates.size()) {
-    		return true;
-    	}
-    	else {
-    		return false;
-    	}
-    }
-    
-    public boolean canEnter (Interactable entity,List<DiscreteCoordinates> coordinates) {
-    	int sum = 0;
-    	for (DiscreteCoordinates coord: coordinates) {
-    		if (cells[coord.x][coord.y].canEnter(entity)==true) {
-    	    	sum = sum + 1;
-    	    }
-    	}
-    	//verify that for all cells are agreement to enter
-    	if (sum == coordinates.size()) {
-    		return true;
-    	}
-    	else {
-    		return false;
-    	}
-    }
+    //At area behavior the decision of can leave of can enter must be done. 
+    //However it depends of the decision at cell level(which depends of each game).
+    public abstract boolean canLeave (Interactable entity,DiscreteCoordinates coord);
+    public abstract boolean canEnter (Interactable entity,DiscreteCoordinates coord);
+
     
     protected void leave(Interactable entity, List<DiscreteCoordinates> coordinates) {
     	for (DiscreteCoordinates coord: coordinates) {

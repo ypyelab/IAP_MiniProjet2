@@ -1,11 +1,16 @@
 package ch.epfl.cs107.play.game.areagame;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import ch.epfl.cs107.play.game.Playable;
 import ch.epfl.cs107.play.game.actor.Actor;
+import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.io.FileSystem;
+import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Transform;
 import ch.epfl.cs107.play.math.Vector;
 import ch.epfl.cs107.play.window.Keyboard;
@@ -20,12 +25,20 @@ public abstract class Area implements Playable {
     // Context objects
 	private Window window;
 	private FileSystem fileSystem;
+	//The behavior Map
+	protected AreaBehavior areaBehavior;
 	
 	// List of actors
-	private List <Actor> actors;
+	protected List <Actor> actors;
 	private List <Actor> registeredActors;
 	private List <Actor> unregisteredActors;
-
+	///And specifically of interactables
+	private Map <Interactable, List<DiscreteCoordinates>> interactablesToEnter;
+	private Map <Interactable, List<DiscreteCoordinates>> interactablesToLeave;
+	
+	//Indicator if the area have been taken before
+	private boolean hasStarted;
+	
 	//Camera Parameter
 	//actor on which the view is centered
 	private Actor viewCandidate;
@@ -35,6 +48,7 @@ public abstract class Area implements Playable {
 	/** @return (float): camera scale factor, assume it is the same in x and y direction */
     public abstract float getCameraScaleFactor();
     
+    
     /**
      * Add an actor to the actors list
      * @param a (Actor): the actor to add, not null
@@ -43,8 +57,11 @@ public abstract class Area implements Playable {
     private void addActor(Actor a, boolean forced) {
         if (forced) {}
         else {
-        	//further treatment
         	boolean errorOccured = !actors.add(a);
+        	//Say an error occurred if <<that>> actor can not go to <<that>> cell
+        	if (a instanceof Interactable) {
+        		errorOccured = errorOccured || !enterAreaCells(((Interactable)a),((Interactable)a).getCurrentCells());
+        	}
     	
         	if (errorOccured && !forced) {
         		System.out.println("Actor "+ a + "cannot be "
@@ -64,10 +81,14 @@ public abstract class Area implements Playable {
     	else {
     		//further treatment
     		boolean errorOccured = !actors.remove(a);
-    	
+    		//Say an error occurred if <<that>> actor can not be removed of <<that>> cell
+        	if (a instanceof Interactable) {
+        		errorOccured = errorOccured || !enterAreaCells(((Interactable)a),((Interactable)a).getCurrentCells());
+        	}
+        	
     		if (errorOccured && !forced) {
     			System.out.println("Actor "+ a + "cannot be "
-    					+ "emoved, so create it");
+    					+ "removed, so create it");
     			addActor(a,true);
     		}
     	}
@@ -115,6 +136,7 @@ public abstract class Area implements Playable {
         	registeredActors.clear();
     	}
     	
+    	//remove unregistered-actors
     	if (!unregisteredActors.isEmpty()) {
     		//remove unregistered-actors
         	unregisteredActors.forEach(urActor->{
@@ -123,6 +145,22 @@ public abstract class Area implements Playable {
         	});
         	unregisteredActors.clear();
     	}	
+    	
+    	//add interactables to enter
+    	if (!interactablesToEnter.isEmpty()) {
+    		for(Entry<Interactable, List<DiscreteCoordinates>> pair: interactablesToEnter.entrySet()) {
+    			areaBehavior.enter(pair.getKey(), pair.getValue());
+    		}
+        	interactablesToEnter.clear();
+    	}
+    	
+    	//remove interactables to leave
+    	if (!interactablesToLeave.isEmpty()) {
+    		for(Entry<Interactable, List<DiscreteCoordinates>> pair: interactablesToEnter.entrySet()) {
+    			areaBehavior.leave(pair.getKey(), pair.getValue());
+    		}
+        	interactablesToLeave.clear();
+    	}
     }
     
     /**
@@ -130,8 +168,7 @@ public abstract class Area implements Playable {
      * @return (int) : the width in number of cols
      */
     public final int getWidth(){
-        // TODO implements me #PROJECT #TUTO
-        return 0;
+        return areaBehavior.getWidth();
     }
 
     /**
@@ -139,29 +176,63 @@ public abstract class Area implements Playable {
      * @return (int) : the height in number of rows
      */
     public final int getHeight(){
-        // TODO implements me #PROJECT #TUTO
-        return 0;
+        return areaBehavior.getHeight();
     }
 
     /** @return the Window Keyboard for inputs */
     public final Keyboard getKeyboard () {
-        // TODO implements me #PROJECT #TUTO
-        return null;
+        return window.getKeyboard();
     }
     
     /** @return the Window Keyboard for inputs */
     public final void setViewCandidate (Actor a) {
         this.viewCandidate = a;
     }
-       
+    
+    /** @return the Window Keyboard for inputs */
+    protected final void setBehavior(AreaBehavior ab) {
+        areaBehavior = ab;
+    }   
+    
+      
+    public final boolean leaveAreaCells(Interactable entity, List<DiscreteCoordinates> coordinates) {
+    	if (areaBehavior.canLeave(entity, coordinates)) {
+    		interactablesToLeave.put(entity, coordinates);
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
+    
+    public final boolean enterAreaCells(Interactable entity, List<DiscreteCoordinates> coordinates) {
+    	if(areaBehavior.canEnter(entity, coordinates)) {
+    		interactablesToEnter.put(entity, coordinates);
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
+    
+    public boolean getHasStarted() {
+    	return hasStarted;
+    }
+    
+
     /// Area implements Playable
 
     @Override
     public boolean begin(Window window, FileSystem fileSystem) {
+    	//indicator if the game have started sometime
+    	hasStarted = true;
 		//Define actors in the game
     	actors = new LinkedList<>();
     	registeredActors = new LinkedList<>();
     	unregisteredActors = new LinkedList<>();
+    	interactablesToEnter = new HashMap<>();
+    	interactablesToLeave = new HashMap<>();
+    	
     	
     	//Define info for camera parameter on principal actor
     	viewCenter = Vector.ZERO;
@@ -171,6 +242,7 @@ public abstract class Area implements Playable {
 		//Initialize window 
 		this.window = window;
 		this.fileSystem = fileSystem;
+		areaBehavior = null;
 		
 		//Transformation on the window
 		Transform viewTransform = Transform.I.scaled(1).translated(Vector.ZERO);
@@ -185,7 +257,6 @@ public abstract class Area implements Playable {
      * @return (boolean) : if the resume succeed, true by default
      */
     public boolean resume(Window window, FileSystem fileSystem){
-        
     	return true;
     }
 
@@ -193,23 +264,28 @@ public abstract class Area implements Playable {
     public void update(float deltaTime) {
     	//Camera issues
     	updateCamera();
-    	
-    	actors.forEach(actor->{
-    		actor.update(deltaTime);
-    		actor.draw(window);
-    	});
+    	if (!actors.isEmpty()) {
+    		actors.forEach(actor->{
+    			actor.update(deltaTime);
+            	actor.draw(window);    		
+        	});
+    	}
     	purgeRegistration();
     }
 
 
-    private void updateCamera () {
+    private void updateCamera() {
         if (viewCandidate!=null) {
-        	viewCenter = viewCandidate.getPosition();
+        	viewCenter = viewCandidate.getPosition();   	
         }
-        scaleFactor = getCameraScaleFactor();
+        else {
+        	viewCenter = Vector.ZERO;
+        }
+        scaleFactor = 22;
         
         //Compute new viewpoint
         Transform viewTransform = Transform.I.scaled(scaleFactor).translated(viewCenter);
+        
         window.setRelativeTransform(viewTransform);
     }
 
@@ -217,6 +293,7 @@ public abstract class Area implements Playable {
      * Suspend method: Can be overridden, called before resume other
      */
     public void suspend(){
+    	//[IS IT A GOOD APPROACH? SUSPEND AND PURGE REGISTRATION]
         purgeRegistration();
     }
 
@@ -225,5 +302,6 @@ public abstract class Area implements Playable {
     public void end() {
         // TODO save the AreaState somewhere
     }
+    
 
 }

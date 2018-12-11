@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import ch.epfl.cs107.play.game.Playable;
 import ch.epfl.cs107.play.game.actor.Actor;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
+import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Transform;
@@ -32,9 +33,12 @@ public abstract class Area implements Playable {
 	protected List <Actor> actors;
 	private List <Actor> registeredActors;
 	private List <Actor> unregisteredActors;
-	///And specifically of interactables
+	///And specifically  interactables
 	private Map <Interactable, List<DiscreteCoordinates>> interactablesToEnter;
 	private Map <Interactable, List<DiscreteCoordinates>> interactablesToLeave;
+	//Add specifically interactors
+	private List <Interactor> interactors;
+	
 	
 	//Indicator if the area have been taken before
 	private boolean hasStarted;
@@ -60,9 +64,15 @@ public abstract class Area implements Playable {
         	boolean errorOccured = !actors.add(a);
         	//Say an error occurred if <<that>> actor can not go to <<that>> cell
         	if (a instanceof Interactable) {
-        		errorOccured = errorOccured || !enterAreaCells(((Interactable)a),((Interactable)a).getCurrentCells());
+        		
+        		errorOccured = errorOccured || !enterAreaCells(((Interactable)a),((Interactable) a).getCurrentCells());
         	}
     	
+        	//Say an error occurred if <<that>> actor could not be add to the list of interactors
+        	if (a instanceof Interactor) {
+        		errorOccured = errorOccured || !interactors.add((Interactor)a);
+        	}
+        	
         	if (errorOccured && !forced) {
         		System.out.println("Actor "+ a + "cannot be "
     				+ "completely added, so remove it from where it was");
@@ -83,7 +93,12 @@ public abstract class Area implements Playable {
     		boolean errorOccured = !actors.remove(a);
     		//Say an error occurred if <<that>> actor can not be removed of <<that>> cell
         	if (a instanceof Interactable) {
-        		errorOccured = errorOccured || !enterAreaCells(((Interactable)a),((Interactable)a).getCurrentCells());
+        		errorOccured = errorOccured || !leaveAreaCells(((Interactable)a),((Interactable)a).getCurrentCells());
+        	}
+        	
+        	//Say an error occurred if <<that>> actor could not be add to the list of interactors
+        	if (a instanceof Interactor) {
+        		errorOccured = errorOccured || !interactors.remove((Interactor)a);
         	}
         	
     		if (errorOccured && !forced) {
@@ -129,10 +144,10 @@ public abstract class Area implements Playable {
     private final void purgeRegistration(){
     	//add registered-actors 
     	if (!registeredActors.isEmpty()){
-    		registeredActors.forEach(rActor->{
-    			//forcedAdd=false
-        		addActor(rActor,false);
-        	});
+    		//System.out.println(registeredActors.toString());
+    		for (Actor rActor: registeredActors) {
+    			addActor(rActor,false);
+    		}
         	registeredActors.clear();
     	}
     	
@@ -234,6 +249,7 @@ public abstract class Area implements Playable {
     	unregisteredActors = new LinkedList<>();
     	interactablesToEnter = new HashMap<>();
     	interactablesToLeave = new HashMap<>();
+    	interactors = new LinkedList<>();
     	
     	
     	//Define info for camera parameter on principal actor
@@ -247,8 +263,8 @@ public abstract class Area implements Playable {
 		areaBehavior = null;
 		
 		//Transformation on the window
-		Transform viewTransform = Transform.I.scaled(1).translated(Vector.ZERO);
-		window.setRelativeTransform(viewTransform);  	
+		//Transform viewTransform = Transform.I.scaled(getCameraScaleFactor()).translated(Vector.ZERO);
+		//window.setRelativeTransform(viewTransform);  	
         return true;
     }
 
@@ -267,12 +283,30 @@ public abstract class Area implements Playable {
     	//Camera issues
     	updateCamera();
     	
+    	//Update actors
     	if (!actors.isEmpty()) {
     		actors.forEach(actor->{
-    			actor.update(deltaTime);
+    			actor.update(deltaTime);  		
+        	});
+    	}
+    	//update interactions
+    	if (!interactors.isEmpty()) {
+    		interactors.forEach(interactor->{
+    			if(interactor.wantsCellInteraction()) {
+    				areaBehavior.cellInteractionOf(interactor);
+    			}
+    			if(interactor.wantsViewInteraction()) {
+    				areaBehavior.viewInteractionOf(interactor);
+    			}
+        	});
+    	}
+    	//update draw
+    	if (!actors.isEmpty()) {
+    		actors.forEach(actor->{
                	actor.draw(window);    		
         	});
     	}
+    	
     	purgeRegistration();
     }
 
@@ -284,10 +318,9 @@ public abstract class Area implements Playable {
         else {
         	viewCenter = Vector.ZERO;
         }
-        scaleFactor = 22;
         
         //Compute new viewpoint
-        Transform viewTransform = Transform.I.scaled(scaleFactor).translated(viewCenter);
+        Transform viewTransform = Transform.I.scaled(getCameraScaleFactor()).translated(viewCenter);
         
         window.setRelativeTransform(viewTransform);
     }

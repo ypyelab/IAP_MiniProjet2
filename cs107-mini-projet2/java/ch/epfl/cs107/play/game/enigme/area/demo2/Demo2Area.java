@@ -19,8 +19,6 @@ public abstract class Demo2Area extends Area{
 		super.begin(window,fileSystem);
 		//associate a grill 
 		setBehavior(new Demo2Behavior(window,getTitle()));
-		//register an unique actor
-		
 		registerActor(new Background(this));
 		return true;
     }
@@ -34,12 +32,6 @@ public abstract class Demo2Area extends Area{
     public boolean canEnter (Interactable entity,List<DiscreteCoordinates> coordinates) {
     	int sum = 0;
     	for (DiscreteCoordinates coord: coordinates) {
-    		//System.out.print(((Demo2Behavior) areaBehavior).canEnter(entity,coord));
-    		//System.out.print(((Demo2Behavior) areaBehavior).isNull(coord));
-    		//System.out.print(((Demo2Behavior) areaBehavior).isWall(coord));
-    		//System.out.print(entity.getCurrentCells());
-    		//System.out.println(((Entity) entity).getPosition());
-    		
     		if (((Demo2Behavior) areaBehavior).canEnter(entity,coord)==true) {
     			sum = sum + 1;
     	    }
@@ -56,7 +48,6 @@ public abstract class Demo2Area extends Area{
 	
     public boolean canLeave (Interactable entity,List<DiscreteCoordinates> coordinates) {
     	int sum = 0;
-    	System.out.println(coordinates.size());
     	for (DiscreteCoordinates coord: coordinates) {
     		if (((Demo2Behavior) areaBehavior).canLeave(entity,coord)==true) {
     	    	sum = sum + 1;

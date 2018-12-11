@@ -12,22 +12,5 @@ public class Level3 extends EnigmeArea{
 		return "Level3";
 	}
 
-	@Override
-	public float getCameraScaleFactor() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public boolean canLeave(Interactable entity, List<DiscreteCoordinates> coord) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean canEnter(Interactable entity, List<DiscreteCoordinates> coord) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 	
 }

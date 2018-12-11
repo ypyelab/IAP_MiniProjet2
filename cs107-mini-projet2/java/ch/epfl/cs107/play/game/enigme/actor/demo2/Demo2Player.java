@@ -8,6 +8,7 @@ import ch.epfl.cs107.play.game.areagame.actor.Interactable;
 import ch.epfl.cs107.play.game.areagame.actor.MovableAreaEntity;
 import ch.epfl.cs107.play.game.areagame.actor.Orientation;
 import ch.epfl.cs107.play.game.areagame.actor.Sprite;
+import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.enigme.area.demo2.Demo2Area;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.math.Vector;
@@ -43,6 +44,10 @@ public class Demo2Player extends MovableAreaEntity implements Interactable {
 		super.setCurrentPosition(position.toVector());
 	}
 	
+	public void setCurrentPosition(Vector position) {
+		super.setCurrentPosition(position);
+	}
+	
 	public void setCurrentArea(Area area) {
 		setOwnerArea(area);
 	}
@@ -57,7 +62,7 @@ public class Demo2Player extends MovableAreaEntity implements Interactable {
 		for (DiscreteCoordinates coord: getEnteringCells()) {
     	    if(((Demo2Area)getOwnerArea()).isDoor(coord)) {
     	    	//if at least one of the entering cells is a door
-    	    	needChangeOfRoom = true;	
+    	    	needChangeOfRoom = true;
     	    }
     	}	
     	return true;
@@ -77,7 +82,6 @@ public class Demo2Player extends MovableAreaEntity implements Interactable {
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
-		//setCurrentPosition(getPosition());
 		//actor is updating with time if keyboard order is given
 		Keyboard keyboard = getOwnerArea().getKeyboard();
 		Button leftArrow = keyboard.get(keyboard.LEFT);
@@ -86,9 +90,7 @@ public class Demo2Player extends MovableAreaEntity implements Interactable {
 				//Animation duration in frame number
 				if (getCanPass()) {
 					move(ANIMATION_DURATION);
-					setCurrentPosition(getPosition().add(-0.05f, 0.00f));
 				}
-				
 				//super.update(deltaTime);
 			}	
 			else {
@@ -103,7 +105,6 @@ public class Demo2Player extends MovableAreaEntity implements Interactable {
 				
 				if(getCanPass()) {
 					move(ANIMATION_DURATION);
-					setCurrentPosition(getPosition().add(0.05f, 0.00f));
 				}
 				
 				//super.update(deltaTime);
@@ -120,7 +121,6 @@ public class Demo2Player extends MovableAreaEntity implements Interactable {
 				
 				if(getCanPass()) {
 					move(ANIMATION_DURATION);
-					setCurrentPosition(getPosition().add(0.00f, 0.05f));
 				}
 				
 				//super.update(deltaTime);
@@ -137,7 +137,6 @@ public class Demo2Player extends MovableAreaEntity implements Interactable {
 				
 				if(getCanPass()) {
 					move(ANIMATION_DURATION);
-					setCurrentPosition(getPosition().add(0.00f, -0.05f));
 				}
 				
 				//super.update(deltaTime);
@@ -196,6 +195,12 @@ public class Demo2Player extends MovableAreaEntity implements Interactable {
 	@Override
 	public void draw(Canvas canvas) {
 		spr.draw(canvas);// TODO Auto-generated method stub	
+	}
+
+	@Override
+	public void acceptInteraction(AreaInteractionVisitor v) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

@@ -1,6 +1,10 @@
 package ch.epfl.cs107.play.game.enigme;
 
+import java.util.List;
+
 import ch.epfl.cs107.play.game.areagame.AreaGame;
+import ch.epfl.cs107.play.game.enigme.actor.Apple;
+import ch.epfl.cs107.play.game.enigme.actor.Door;
 import ch.epfl.cs107.play.game.enigme.actor.EnigmePlayer;
 import ch.epfl.cs107.play.game.enigme.actor.demo2.Demo2Player;
 import ch.epfl.cs107.play.game.enigme.area.Level1;
@@ -19,8 +23,8 @@ import ch.epfl.cs107.play.window.Window;
  */
 public class Enigme extends AreaGame {
 
-	//The extra attribute of Demo2 is the actor
-		EnigmePlayer player;
+	//The extra attribute of Demo2 is the actors
+	EnigmePlayer player;
 
     /// Enigme implements Playable
 
@@ -56,19 +60,14 @@ public class Enigme extends AreaGame {
     public void update(float deltaTime) {
         super.update(deltaTime);
 	
-    	if (player.needChangeOfRoom) {
-    		if (getCurrentArea().getTitle()=="LevelSelector") {
-    			getCurrentArea().unregisterActor(player);
-    			currentArea = setCurrentArea("Level1",false);
-    			player.setCurrentPosition(new DiscreteCoordinates(5,2));	
-    		}
-    		else {
-    			getCurrentArea().unregisterActor(player);
-    			currentArea = setCurrentArea("LevelSelector",false);
-    			player.setCurrentPosition(new DiscreteCoordinates(5,5));
-    		}
+    	if (player.getPassDoor()) {
+    		//getCurrentArea().suspend();
+    		player.setIsPassingDoor(false);
+    		getCurrentArea().unregisterActor(player);
+    		currentArea = setCurrentArea(player.getLastDoor().getDestination(),false);
+    		player.setCurrentPosition(player.getLastDoor().getCoordDest());	
     		player.setCurrentArea(currentArea);
-    		player.setNoNeedOfChange();
+    		
 			getCurrentArea().registerActor(player);	
     	}
     	getCurrentArea().update(deltaTime);

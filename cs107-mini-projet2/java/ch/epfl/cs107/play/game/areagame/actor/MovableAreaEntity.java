@@ -62,11 +62,12 @@ public abstract class MovableAreaEntity extends AreaEntity {
         			framesForMove=1;
         		}
         		framesForCurrentMove = framesForMove;
-        		
+    		
         		//select objective cell
+        		
         		Vector orientation = getOrientation().toVector();
         		targetMainCellCoordinates = getCurrentMainCellCoordinates().jump(orientation);
-
+        		isMoving = true;
         		return true;			
         	}
         	else {
@@ -103,8 +104,10 @@ public abstract class MovableAreaEntity extends AreaEntity {
     @Override
     public void update(float deltaTime) {
         if(isMoving & !(targetMainCellCoordinates.equals(getCurrentMainCellCoordinates()))) {
+        	isMoving = false;
         	Vector distance = getOrientation().toVector();
         	distance = distance.mul(1.0f/framesForCurrentMove);
+        	System.out.println(distance);
         	setCurrentPosition(getPosition().add(distance));
         }
         else {

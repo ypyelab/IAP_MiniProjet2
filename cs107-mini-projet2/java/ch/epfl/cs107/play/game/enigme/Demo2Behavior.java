@@ -4,6 +4,7 @@ import java.util.List;
 import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.AreaBehavior.Cell;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
+import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Image;
 import ch.epfl.cs107.play.window.Window;
@@ -18,7 +19,7 @@ public class Demo2Behavior extends AreaBehavior{
 		
 		//fill area
 		for (int i = 0; i < this.getHeight();i++) {
-			for (int j=0; j < this.getWidth(); j++) {
+			for (int j = 0; j < this.getWidth(); j++) {
 				Demo2CellType cellType = Demo2CellType.toType(this.getBehaviorMap().getRGB(this.getHeight()-1-j,i));
 				getCells()[i][j] = new Demo2Cell(i,j,cellType);
 			}
@@ -92,6 +93,12 @@ public class Demo2Behavior extends AreaBehavior{
 		@Override
 		protected boolean canLeave(Interactable entity) {
 			return true;
+		}
+		@Override
+		public void acceptInteraction(AreaInteractionVisitor v) {
+			// TODO Auto-generated method stub
+			//Not needed in this stage
+			
 		}
 
     }

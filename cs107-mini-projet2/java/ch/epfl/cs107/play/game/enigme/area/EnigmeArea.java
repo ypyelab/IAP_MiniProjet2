@@ -32,13 +32,7 @@ public abstract class EnigmeArea extends Area{
 	//we are not really using this approach, verify if it is really needed by Area (as abstract)
 	public boolean canEnter (Interactable entity,List<DiscreteCoordinates> coordinates) {
     	int sum = 0;
-    	System.out.println(coordinates);
     	for (DiscreteCoordinates coord: coordinates) {
-    		//System.out.print(((Demo2Behavior) areaBehavior).canEnter(entity,coord));
-    		//System.out.print(((Demo2Behavior) areaBehavior).isNull(coord));
-    		//System.out.print(((Demo2Behavior) areaBehavior).isWall(coord));
-    		//System.out.print(entity.getCurrentCells());
-    		//System.out.println(((Entity) entity).getPosition());
     		if (coord.x>= 0 && coord.y >= 0 && coord.x < this.getHeight() && coord.y < this.getWidth()) {
     			if (((EnigmeBehavior)areaBehavior).canEnter(entity,coord)==true) {
         			sum = sum + 1;

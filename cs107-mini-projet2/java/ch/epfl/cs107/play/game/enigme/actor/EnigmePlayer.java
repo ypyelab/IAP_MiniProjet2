@@ -57,7 +57,12 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 		
 		@Override
 		public void interactWith(Apple apple) {
-			apple.setCollected(true);
+			//new possibility
+			Keyboard keyboard = getOwnerArea().getKeyboard();
+			Button lkey = keyboard.get(keyboard.L);
+			if(lkey.isDown()) {
+				getOwnerArea().unregisterActor(apple);
+			}	
 		}
 		
 	}
@@ -85,8 +90,8 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 	}
 	
 	protected boolean getCanPass() {
-		
-		if (this.getOwnerArea().canEnter((Interactable)this, getEnteringCells())) {
+		//The entering cells, are now the ones in its field of vision
+		if (((EnigmeArea)getOwnerArea()).canEnter(this,getEnteringCells())) {
 	    	return true;
 	    }
 	    else {
@@ -97,7 +102,7 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 	
 	@Override
 	public void update(float deltaTime) {
-		//super.update(deltaTime);
+		super.update(deltaTime);
 		//actor is updating with time if keyboard order is given
 		Keyboard keyboard = getOwnerArea().getKeyboard();
 		Button leftArrow = keyboard.get(keyboard.LEFT);
@@ -105,9 +110,9 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 			if(this.getOrientation()==Orientation.LEFT) {
 				//Animation duration in frame number
 				if (getCanPass()) {
-					super.move(ANIMATION_DURATION);
+					move(ANIMATION_DURATION);
 				}
-
+				//super.update(deltaTime);
 			}	
 			else {
 				this.setOrientation(Orientation.LEFT);
@@ -120,8 +125,10 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 				//Animation duration in frame number
 				
 				if(getCanPass()) {
-					super.move(ANIMATION_DURATION);
+					move(ANIMATION_DURATION);
 				}
+				
+				//super.update(deltaTime);
 			}
 			else {	
 				this.setOrientation(Orientation.RIGHT);
@@ -134,8 +141,9 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 				//Animation duration in frame number
 				
 				if(getCanPass()) {
-					super.move(ANIMATION_DURATION);
+					move(ANIMATION_DURATION);
 				}
+				
 				//super.update(deltaTime);
 			}
 			else {
@@ -146,23 +154,25 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 		Button downArrow = keyboard.get(keyboard.DOWN);
 		if(downArrow.isDown()) {
 			if(this.getOrientation()==Orientation.DOWN) {	
-				//Animation duration in frame number	
+				//Animation duration in frame number
+				
 				if(getCanPass()) {
-					super.move(ANIMATION_DURATION);
+					move(ANIMATION_DURATION);
 				}
+				
+				//super.update(deltaTime);
 			}
 			else {
 				this.setOrientation(Orientation.DOWN);
 			}
 		}	
 
-		//new possibility
-		Button lkey = keyboard.get(keyboard.L);
-		if(lkey.isDown()) {
-			wantsViewInteraction = true;
-		}
-		
+
 	}
+
+		
+		
+	
 	
 	///specific methods for Demo2Player
 	public void enterArea(Area area, DiscreteCoordinates position) {
@@ -225,6 +235,7 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 		return lastDoor;
 	}
 
+	
 	//Implements Interactor
 	@Override
 	public List<DiscreteCoordinates> getFieldOfViewCells() {

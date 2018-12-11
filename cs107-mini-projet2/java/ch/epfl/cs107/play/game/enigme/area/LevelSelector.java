@@ -1,6 +1,8 @@
 package ch.epfl.cs107.play.game.enigme.area;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import ch.epfl.cs107.play.game.areagame.actor.Background;
 import ch.epfl.cs107.play.game.enigme.EnigmeBehavior;
@@ -15,6 +17,7 @@ public class LevelSelector extends EnigmeArea{
 	@Override
     public boolean begin(Window window, FileSystem fileSystem) {
 		super.begin(window,fileSystem);
+
 		//plus Door1
 		registerActor(new Door(this, "Level1",  new DiscreteCoordinates(5,1), new DiscreteCoordinates(2,7), new DiscreteCoordinates(2,7)));
 		//plus Door2

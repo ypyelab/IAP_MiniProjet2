@@ -23,11 +23,11 @@ public class LevelSelector extends EnigmeArea{
 		//plus Door2
 		registerActor(new Door(this, "Level2",  new DiscreteCoordinates(2,6), new DiscreteCoordinates(3,7), new DiscreteCoordinates(3,7)));
 		//plus Door 3 to Door 7
-		registerActor(new Door(this, "",  null, new DiscreteCoordinates(4,7), new DiscreteCoordinates(4,7)));
-		registerActor(new Door(this, "",  null, new DiscreteCoordinates(5,7), new DiscreteCoordinates(5,7)));
-		registerActor(new Door(this, "",  null, new DiscreteCoordinates(6,7), new DiscreteCoordinates(6,7)));
-		registerActor(new Door(this, "",  null, new DiscreteCoordinates(7,7), new DiscreteCoordinates(7,7)));
-		registerActor(new Door(this, "",  null, new DiscreteCoordinates(8,7), new DiscreteCoordinates(8,7)));
+		registerActor(new Door(this, "LevelSelector",  new DiscreteCoordinates(4,6), new DiscreteCoordinates(4,7), new DiscreteCoordinates(4,7)));
+		registerActor(new Door(this, "LevelSelector",  new DiscreteCoordinates(5,6), new DiscreteCoordinates(5,7), new DiscreteCoordinates(5,7)));
+		registerActor(new Door(this, "LevelSelector",  new DiscreteCoordinates(6,6), new DiscreteCoordinates(6,7), new DiscreteCoordinates(6,7)));
+		registerActor(new Door(this, "LevelSelector",  new DiscreteCoordinates(7,6), new DiscreteCoordinates(7,7), new DiscreteCoordinates(7,7)));
+		registerActor(new Door(this, "LevelSelector",  new DiscreteCoordinates(8,6), new DiscreteCoordinates(8,7), new DiscreteCoordinates(8,7)));
 		
 		return true;
     }

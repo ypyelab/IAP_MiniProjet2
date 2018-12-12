@@ -57,7 +57,7 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 		
 		@Override
 		public void interactWith(Collectable collectable) {
-			getOwnerArea().unregisterActor(collectable);
+			collectable.setCollected(true);
 		}
 		
 	}
@@ -98,6 +98,7 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
+		
 		//so in each update is different
 		wantsViewInteraction = false;
 		//actor is updating with time if keyboard order is given

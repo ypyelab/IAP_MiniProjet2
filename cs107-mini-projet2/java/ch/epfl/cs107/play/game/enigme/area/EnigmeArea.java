@@ -1,16 +1,27 @@
 package ch.epfl.cs107.play.game.enigme.area;
 import java.util.List;
 
+import ch.epfl.cs107.play.game.actor.Actor;
 import ch.epfl.cs107.play.game.areagame.Area;
 import ch.epfl.cs107.play.game.areagame.actor.Background;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
-import ch.epfl.cs107.play.game.enigme.Demo2Behavior;
 import ch.epfl.cs107.play.game.enigme.EnigmeBehavior;
+import ch.epfl.cs107.play.game.enigme.actor.Collectable;
 import ch.epfl.cs107.play.io.FileSystem;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Window;
 
 public abstract class EnigmeArea extends Area{
+	
+	@Override
+	public void update(float deltatime) {
+		for (Actor actor: actors) {
+			if (actor instanceof Collectable && ((Collectable)actor).getCollected()) {
+				this.unregisterActor(actor);
+			}
+		}
+		super.update(deltatime);
+	}
 	
 	//The begin method should get the title of the "current area"
     public boolean begin(Window window, FileSystem fileSystem) {

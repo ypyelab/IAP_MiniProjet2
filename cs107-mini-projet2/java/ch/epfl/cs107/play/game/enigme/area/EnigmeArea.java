@@ -35,7 +35,7 @@ public abstract class EnigmeArea extends Area{
     	for (DiscreteCoordinates coord: coordinates) {
     		if (coord.x>= 0 && coord.y >= 0 && coord.x < this.getHeight() && coord.y < this.getWidth()) {
     			if (((EnigmeBehavior)areaBehavior).canEnter(entity,coord)==true) {
-        			sum = sum + 1;
+    				sum = sum + 1;
         	    }
     		}    		
     	}

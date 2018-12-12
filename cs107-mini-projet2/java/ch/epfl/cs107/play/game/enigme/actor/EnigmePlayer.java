@@ -57,12 +57,7 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 		
 		@Override
 		public void interactWith(Apple apple) {
-			//new possibility
-			Keyboard keyboard = getOwnerArea().getKeyboard();
-			Button lkey = keyboard.get(keyboard.L);
-			if(lkey.isDown()) {
-				getOwnerArea().unregisterActor(apple);
-			}	
+			getOwnerArea().unregisterActor(apple);
 		}
 		
 	}
@@ -111,6 +106,7 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 				//Animation duration in frame number
 				if (getCanPass()) {
 					move(ANIMATION_DURATION);
+					
 				}
 				//super.update(deltaTime);
 			}	
@@ -125,6 +121,7 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 				//Animation duration in frame number
 				
 				if(getCanPass()) {
+					
 					move(ANIMATION_DURATION);
 				}
 				
@@ -165,13 +162,15 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 			else {
 				this.setOrientation(Orientation.DOWN);
 			}
+		}
+		
+		//new possibility
+		Button lkey = keyboard.get(keyboard.L);
+		if(lkey.isDown()) {
+			wantsViewInteraction = true;
+			//interactWith(getFieldOfViewCells());
 		}	
-
-
-	}
-
-		
-		
+	}	
 	
 	
 	///specific methods for Demo2Player
@@ -205,7 +204,7 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 	@Override
 	public boolean takeCellSpace() {
 		//no one can take his space
-		return true;
+		return false;
 	}
 
 	@Override

@@ -3,10 +3,12 @@ package ch.epfl.cs107.play.game.enigme;
 import ch.epfl.cs107.play.game.areagame.AreaBehavior;
 import ch.epfl.cs107.play.game.areagame.AreaBehavior.Cell;
 import ch.epfl.cs107.play.game.areagame.actor.Interactable;
+import ch.epfl.cs107.play.game.areagame.actor.Interactor;
 import ch.epfl.cs107.play.game.areagame.handler.AreaInteractionVisitor;
 import ch.epfl.cs107.play.game.areagame.handler.EnigmeInteractionVisitor;
 import ch.epfl.cs107.play.game.enigme.Demo2Behavior.Demo2Cell;
 import ch.epfl.cs107.play.game.enigme.Demo2Behavior.Demo2CellType;
+import ch.epfl.cs107.play.game.enigme.actor.EnigmePlayer;
 import ch.epfl.cs107.play.math.DiscreteCoordinates;
 import ch.epfl.cs107.play.window.Window;
 
@@ -26,6 +28,18 @@ public class EnigmeBehavior extends AreaBehavior{
 		
 	}
 	
+    public void cellInteractionOf(Interactor interactor) {
+    	for (DiscreteCoordinates coord: interactor.getCurrentCells()) {
+    		((EnigmeCell)(super.getCells()[coord.x][coord.y])).cellInteractionOf(interactor);
+    	}
+    }
+    
+    public void viewInteractionOf(Interactor interactor) {
+    	for (DiscreteCoordinates coord: interactor.getFieldOfViewCells()) {
+    		((EnigmeCell)(super.getCells()[coord.x][coord.y])).viewInteractionOf(interactor);
+    	}
+    }
+    
 	
 	///Cells inside behavior
 	public class EnigmeCell extends Cell{
@@ -39,7 +53,7 @@ public class EnigmeBehavior extends AreaBehavior{
 		
 		@Override
 		public boolean takeCellSpace() {
-			return true;
+			return false;
 		}
 
 		@Override
@@ -58,18 +72,12 @@ public class EnigmeBehavior extends AreaBehavior{
 				return false;
 			}
 			else {
-	    		int sum = 0;
 				for(Interactable interactable: this.getInteractables()) {
 	    			if(interactable.takeCellSpace()) {
-	    				sum = sum++;
+	    				return false;
 	    			}
 				}
-	    		if(sum!=0) {
-	    			return false;
-	    		}
-	    		else {
-	    			return true;
-	    		}
+	    		return true;
 			}
 		}
 			
@@ -78,6 +86,22 @@ public class EnigmeBehavior extends AreaBehavior{
 			return true;
 		}
 
+		void cellInteractionOf(Interactor interactor) {
+			for(Interactable interactable: this.getInteractables()) {
+				if(interactable.isCellInteractable()) {
+					((EnigmePlayer)(interactor)).interactWith(interactable);
+				}
+			}
+		}
+		
+		void viewInteractionOf(Interactor interactor) {
+			for(Interactable interactable: this.getInteractables()) {
+				if(interactable.isViewInteractable()) {
+					((EnigmePlayer)(interactor)).interactWith(interactable);
+				}
+			}
+		}
+		
 		@Override
 		public void acceptInteraction(AreaInteractionVisitor v) {
 			//EnigmePlayer is not asking for this interaction
@@ -120,6 +144,8 @@ public class EnigmeBehavior extends AreaBehavior{
 		
 		}
 	}	
+	
+
 	
     public boolean canLeave (Interactable entity, DiscreteCoordinates coord) {
     	return ((EnigmeCell) getCells()[coord.x][coord.y]).canLeave(entity);

@@ -98,6 +98,8 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 	@Override
 	public void update(float deltaTime) {
 		super.update(deltaTime);
+		//so in each update is different
+		wantsViewInteraction = false;
 		//actor is updating with time if keyboard order is given
 		Keyboard keyboard = getOwnerArea().getKeyboard();
 		Button leftArrow = keyboard.get(keyboard.LEFT);
@@ -166,9 +168,8 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 		
 		//new possibility
 		Button lkey = keyboard.get(keyboard.L);
-		if(lkey.isDown()) {
+		if(lkey.isPressed()) {
 			wantsViewInteraction = true;
-			//interactWith(getFieldOfViewCells());
 		}	
 	}	
 	

@@ -90,21 +90,31 @@ public abstract class Area implements Playable {
     	if (forced) {}
     	else {
     		//further treatment
-    		boolean errorOccured = !actors.remove(a);
+    		boolean errorOccured = false;
+    		
     		//Say an error occurred if <<that>> actor can not be removed of <<that>> cell
-        	if (a instanceof Interactable) {
-        		errorOccured = errorOccured || !leaveAreaCells(((Interactable)a),((Interactable)a).getCurrentCells());
-        	}
-        	
-        	//Say an error occurred if <<that>> actor could not be add to the list of interactors
+    		if (a instanceof Interactable) {
+    			errorOccured= !leaveAreaCells(((Interactable)a),((Interactable)a).getCurrentCells());
+    		}
+    		
+    		//Say an error occurred if <<that>> actor could not be add to the list of interactors
         	if (a instanceof Interactor) {
         		errorOccured = errorOccured || !interactors.remove((Interactor)a);
-        	}
+        	}	
+    		errorOccured =  errorOccured || !actors.remove(a);
+        	
         	
     		if (errorOccured && !forced) {
     			System.out.println("Actor "+ a + "cannot be "
     					+ "removed, so create it");
+    			//so create it
     			addActor(a,true);
+    			if (a instanceof Interactable) {
+    				enterAreaCells(((Interactable)a),((Interactable)a).getCurrentCells());
+    			}
+    			if (a instanceof Interactor) {
+    				interactors.add((Interactor)a);
+    			}
     		}
     	}
     }
@@ -171,8 +181,8 @@ public abstract class Area implements Playable {
     	
     	//remove interactables to leave
     	if (!interactablesToLeave.isEmpty()) {
-    		for(Entry<Interactable, List<DiscreteCoordinates>> pair: interactablesToEnter.entrySet()) {
-    			areaBehavior.leave(pair.getKey(), pair.getValue());
+    		for(Interactable interactable: interactablesToLeave.keySet()) {
+    			areaBehavior.leave(interactable, interactable.getCurrentCells());
     		}
         	interactablesToLeave.clear();
     	}

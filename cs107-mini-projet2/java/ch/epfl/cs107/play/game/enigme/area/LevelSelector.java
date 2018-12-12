@@ -19,15 +19,15 @@ public class LevelSelector extends EnigmeArea{
 		super.begin(window,fileSystem);
 
 		//plus Door1
-		registerActor(new Door(this, "Level1",  new DiscreteCoordinates(5,1), new DiscreteCoordinates(2,7), new DiscreteCoordinates(2,7)));
+		registerActor(new Door(this, "Level1",  new DiscreteCoordinates(1,6), new DiscreteCoordinates(2,7), new DiscreteCoordinates(2,7)));
 		//plus Door2
-		registerActor(new Door(this, "Level2",  new DiscreteCoordinates(5,1), new DiscreteCoordinates(3,7), new DiscreteCoordinates(3,7)));
+		registerActor(new Door(this, "Level2",  new DiscreteCoordinates(2,6), new DiscreteCoordinates(3,7), new DiscreteCoordinates(3,7)));
 		//plus Door 3 to Door 7
-		//registerActor(new Door(this, "",  null, new DiscreteCoordinates(4,7), new DiscreteCoordinates(4,7)));
-		//registerActor(new Door(this, "",  null, new DiscreteCoordinates(5,7), new DiscreteCoordinates(5,7)));
-		//registerActor(new Door(this, "",  null, new DiscreteCoordinates(6,7), new DiscreteCoordinates(6,7)));
-		//registerActor(new Door(this, "",  null, new DiscreteCoordinates(7,7), new DiscreteCoordinates(7,7)));
-		//registerActor(new Door(this, "",  null, new DiscreteCoordinates(8,7), new DiscreteCoordinates(8,7)));
+		registerActor(new Door(this, "",  null, new DiscreteCoordinates(4,7), new DiscreteCoordinates(4,7)));
+		registerActor(new Door(this, "",  null, new DiscreteCoordinates(5,7), new DiscreteCoordinates(5,7)));
+		registerActor(new Door(this, "",  null, new DiscreteCoordinates(6,7), new DiscreteCoordinates(6,7)));
+		registerActor(new Door(this, "",  null, new DiscreteCoordinates(7,7), new DiscreteCoordinates(7,7)));
+		registerActor(new Door(this, "",  null, new DiscreteCoordinates(8,7), new DiscreteCoordinates(8,7)));
 		
 		return true;
     }

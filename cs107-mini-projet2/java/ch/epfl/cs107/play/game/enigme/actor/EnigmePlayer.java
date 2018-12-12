@@ -56,8 +56,8 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 		}
 		
 		@Override
-		public void interactWith(Apple apple) {
-			getOwnerArea().unregisterActor(apple);
+		public void interactWith(Collectable collectable) {
+			getOwnerArea().unregisterActor(collectable);
 		}
 		
 	}

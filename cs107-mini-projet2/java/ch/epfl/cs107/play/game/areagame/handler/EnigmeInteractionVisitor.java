@@ -1,7 +1,7 @@
 package ch.epfl.cs107.play.game.areagame.handler;
 
 import ch.epfl.cs107.play.game.enigme.EnigmeBehavior;
-import ch.epfl.cs107.play.game.enigme.actor.Apple;
+import ch.epfl.cs107.play.game.enigme.actor.Collectable;
 import ch.epfl.cs107.play.game.enigme.actor.Door;
 import ch.epfl.cs107.play.game.enigme.actor.EnigmePlayer;
 
@@ -12,7 +12,7 @@ public interface EnigmeInteractionVisitor extends AreaInteractionVisitor {
      * Notice: if this method is used, then you probably forget to cast the AreaInteractionVisitor into its correct child
      * @param other (Interactable): interactable to interact with, not null
      */
-    default void interactWith(Apple apple){
+    default void interactWith(Collectable collectable){
         //by default the interaction is empty
     }
     

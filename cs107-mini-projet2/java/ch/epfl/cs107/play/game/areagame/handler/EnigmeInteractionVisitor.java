@@ -4,10 +4,12 @@ import ch.epfl.cs107.play.game.enigme.EnigmeBehavior;
 import ch.epfl.cs107.play.game.enigme.actor.Collectable;
 import ch.epfl.cs107.play.game.enigme.actor.Door;
 import ch.epfl.cs107.play.game.enigme.actor.EnigmePlayer;
+import ch.epfl.cs107.play.game.enigme.actor.Message;
 import ch.epfl.cs107.play.game.enigme.actor.PressurePlate;
 import ch.epfl.cs107.play.game.enigme.actor.SignalDoor;
 import ch.epfl.cs107.play.game.enigme.actor.SignalRock;
 import ch.epfl.cs107.play.game.enigme.actor.Switchable;
+import ch.epfl.cs107.play.game.enigme.actor.TorchSp;
 
 public interface EnigmeInteractionVisitor extends AreaInteractionVisitor {
 
@@ -45,6 +47,14 @@ public interface EnigmeInteractionVisitor extends AreaInteractionVisitor {
 	}
 	
 	default void interactWith(SignalRock sigRock) {
+		//by default nothing
+	}
+	
+	default void interactWith(TorchSp torchSp) {
+		//by default nothing
+	}
+	
+	default void interactWith(Message message) {
 		//by default nothing
 	}
 }

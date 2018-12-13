@@ -59,7 +59,7 @@ public class Level3 extends EnigmeArea{
 		sigDoor = new SignalDoor(this, "LevelSelector", new DiscreteCoordinates(3,6),new DiscreteCoordinates(5,9), key, new DiscreteCoordinates(5,9));
 		sigRock1 = new SignalRock(this, new DiscreteCoordinates(6,8), presPlate);
 		sigRock2 = new SignalRock(this, new DiscreteCoordinates(5,8), new MultipleAnd(presSwitch1,presSwitch2,presSwitch3,presSwitch4,presSwitch5,presSwitch6,presSwitch7));
-		sigRock3 = new SignalRock(this, new DiscreteCoordinates(4,8),new Or(new And (lev1, new And(new Not(lev2),lev3)),torch));
+		sigRock3 = new SignalRock(this, new DiscreteCoordinates(4,8),new And(new Or (new Not(lev1), new Or(lev2,new Not(lev3))),new Not(torch)));
 		
 		
 		//registering attributes <actors>

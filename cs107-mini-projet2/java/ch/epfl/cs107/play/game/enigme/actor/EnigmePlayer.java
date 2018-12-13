@@ -283,7 +283,6 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 
 	@Override
 	public boolean wantsViewInteraction() {
-		// TODO Auto-generated method stub
 		return wantsViewInteraction;
 	}
 

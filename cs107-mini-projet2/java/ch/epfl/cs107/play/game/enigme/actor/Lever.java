@@ -25,14 +25,14 @@ public class Lever extends Switchable{
 	
 	//Proper methods (what makes it special)
 	public void moveToLeft() {
-		setSwitch(true);
+		this.switchOn = true;
 		Vector orientation = Orientation.LEFT.toVector();
 		//PROBABLY A CHANGE IN "CELL" IS NEEDED
 		setCurrentPosition(getCurrentMainCellCoordinates().jump(orientation).toVector());
 	}
 	
 	public void moveToRight() {
-		setSwitch(false);
+		this.switchOn = false;
 		Vector orientation = Orientation.RIGHT.toVector();
 		//PROBABLY A CHANGE IN "CELL" IS NEEDED
 		setCurrentPosition(getCurrentMainCellCoordinates().jump(orientation).toVector());

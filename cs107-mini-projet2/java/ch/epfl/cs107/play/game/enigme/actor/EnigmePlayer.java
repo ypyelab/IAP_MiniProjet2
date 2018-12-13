@@ -60,6 +60,21 @@ public class EnigmePlayer extends MovableAreaEntity implements Interactor {
 			collectable.setCollected(true);
 		}
 		
+		@Override
+		public void interactWith(Switchable switchable) {
+			switchable.setSwitch();
+		}
+		
+		@Override
+		public void interactWith(PressurePlate presPlate) {
+			presPlate.setSwitch();
+		}
+		
+		@Override
+		public void interactWith(SignalDoor sigDoor) {
+			setIsPassingDoor(sigDoor);
+		}
+		
 	}
 	
 	

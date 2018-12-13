@@ -33,8 +33,13 @@ public abstract class Switchable extends AreaEntity implements Logic{
 		return false;
 	}	
 	
-	public void setSwitch(boolean set) {
-		switchOn = set;
+	public void setSwitch() {
+		if (switchOn == true) {
+			switchOn = false;
+		}
+		else {
+			switchOn = true;
+		}
 	}
 	
 }

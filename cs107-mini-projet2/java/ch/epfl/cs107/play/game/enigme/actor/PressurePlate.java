@@ -30,8 +30,8 @@ public class PressurePlate extends AreaEntity implements Logic{
 		switchOn = false;
 	}
 	
-	public void setSwitch(boolean bol) {
-		switchOn = bol;
+	public void setSwitch() {
+		switchOn = true;
 		tempDurAct = 0.0f;
 	}
 	

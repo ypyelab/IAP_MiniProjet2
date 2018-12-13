@@ -4,6 +4,10 @@ import ch.epfl.cs107.play.game.enigme.EnigmeBehavior;
 import ch.epfl.cs107.play.game.enigme.actor.Collectable;
 import ch.epfl.cs107.play.game.enigme.actor.Door;
 import ch.epfl.cs107.play.game.enigme.actor.EnigmePlayer;
+import ch.epfl.cs107.play.game.enigme.actor.PressurePlate;
+import ch.epfl.cs107.play.game.enigme.actor.SignalDoor;
+import ch.epfl.cs107.play.game.enigme.actor.SignalRock;
+import ch.epfl.cs107.play.game.enigme.actor.Switchable;
 
 public interface EnigmeInteractionVisitor extends AreaInteractionVisitor {
 
@@ -27,5 +31,20 @@ public interface EnigmeInteractionVisitor extends AreaInteractionVisitor {
     default void interactWith(EnigmeBehavior.EnigmeCell cell){
         //by default the interaction is empty
     }
-    
+
+	default void interactWith(Switchable switchable) {
+		//by default nothing
+	}
+	
+	default void interactWith(PressurePlate presPlate) {
+		//by default nothing
+	}
+	
+	default void interactWith(SignalDoor sigDoor) {
+		//by default nothing
+	}
+	
+	default void interactWith(SignalRock sigRock) {
+		//by default nothing
+	}
 }
